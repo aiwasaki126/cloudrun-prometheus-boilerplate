@@ -29,7 +29,9 @@ In this repository, we build a external monitoring system using Prometheus as an
 1. Set environment variables to specify remote write (If you don't need remote write, remove remote write section from prometheus.yml).
 
     ```bash
-    ./services/prometheus/secrets/envrc
+    export REMOTE_WRITE_URL=https://hoge.com 
+    export REMOTE_USERNAME=fuga
+    export REMOTE_PASSWORD=go
     ```
 
 2. Run containers locally.
