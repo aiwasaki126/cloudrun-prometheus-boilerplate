@@ -1,0 +1,52 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  annotations:
+    run.googleapis.com/ingress: internal-and-cloud-load-balancing
+    run.googleapis.com/ingress-status: internal-and-cloud-load-balancing
+    run.googleapis.com/launch-stage: BETA
+    run.googleapis.com/operation-id: 80f10367-a564-426c-96c3-12efb0a758e3
+  labels:
+    cloud.googleapis.com/location: asia-northeast1
+  name: prometheus-cluster
+  namespace: '1076954866659'
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: '50'
+        autoscaling.knative.dev/minScale: '1'
+        run.googleapis.com/client-name: gcloud
+        run.googleapis.com/client-version: 444.0.0
+        run.googleapis.com/cpu-throttling: 'false'
+      labels:
+        run.googleapis.com/startupProbeType: Default
+      name: prometheus-cluster-00001-aaa
+    spec:
+      containerConcurrency: 80
+      containers:
+      - image: asia-northeast1-docker.pkg.dev/${PROJECT_ID}/prometheus/prometheus:latest
+        ports:
+        - containerPort: 9090
+          name: http1
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        startupProbe:
+          failureThreshold: 1
+          periodSeconds: 240
+          tcpSocket:
+            port: 9090
+          timeoutSeconds: 240
+      - image: asia-northeast1-docker.pkg.dev/${PROJECT_ID}/prometheus/blackbox-exporter:latest
+        name: blackbox-exporter
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 256Mi
+      serviceAccountName: run-prometheus-cluster@${PROJECT_ID}.iam.gserviceaccount.com
+      timeoutSeconds: 300
+  traffic:
+  - latestRevision: true
+    percent: 100
