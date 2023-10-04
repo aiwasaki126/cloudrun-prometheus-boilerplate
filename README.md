@@ -24,6 +24,9 @@ In this repository, we build a external monitoring system using Prometheus as an
 
 ## Getting Started
 
+Containers activated by `docker compose up` are defined in `services/prometheus/.local`.
+On the other hand, containers deployed to Google Cloud are defined in `services/prometheus`. Be careful!
+
 ### Run Locally
 
 1. Set environment variables to specify remote write (If you don't need remote write, remove remote write section from prometheus.yml).
