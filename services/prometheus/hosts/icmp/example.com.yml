@@ -1,0 +1,4 @@
+- targets:
+    - example.com
+  labels:
+    restriction: false

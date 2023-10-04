@@ -1,0 +1,54 @@
+global:
+  scrape_interval: "60s"
+  scrape_timeout: "10s"
+  evaluation_interval: "1m"
+
+scrape_configs:
+  - job_name: prometheus
+    metrics_path: /metrics
+    scheme: http
+    follow_redirects: true
+    static_configs:
+      - targets:
+          - localhost:9090
+
+  - job_name: remo_exporter
+    metrics_path: /metrics
+    scheme: http
+    follow_redirects: true
+    static_configs:
+      - targets:
+          - remo_exporter:9352
+
+  - job_name: blackbox_icmp
+    metrics_path: /probe
+    params:
+      module: [icmp]
+    file_sd_configs:
+      - files:
+        - hosts/icmp/*.yml
+    relabel_configs: &blackbox_relabel_configs
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox_exporter:9115
+
+  - job_name: 'blackbox_http_get'
+    metrics_path: /probe
+    params:
+      module: [http_get]
+    file_sd_configs:
+      - files:
+        - hosts/http_get/*.yml
+    relabel_configs: *blackbox_relabel_configs
+
+remote_write:
+  - url: ${REMOTE_WRITE_URL}
+    remote_timeout: "30s"
+    send_exemplars: false
+    follow_redirects: true
+    basic_auth:
+      username: ${REMOTE_USERNAME}
+      password: ${REMOTE_PASSWORD}
