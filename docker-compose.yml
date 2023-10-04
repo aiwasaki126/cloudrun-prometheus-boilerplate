@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  prometheus:
+    networks:
+      - default
+    ports:
+      - 9090:9090
+    build:
+      context: services/prometheus
+      dockerfile: .local/Dockerfile
+      args:
+        - remote_write_url=${REMOTE_WRITE_URL}
+        - remote_username=${REMOTE_USERNAME}
+        - remote_password=${REMOTE_PASSWORD}
+    command: "--config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus"
+
+  blackbox_exporter:
+    networks:
+      - default
+    ports:
+      - 9115:9115
+    build:
+      context: services/blackbox_exporter
+      dockerfile: Dockerfile
+
+networks:
+  default:

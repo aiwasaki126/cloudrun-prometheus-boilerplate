@@ -1,0 +1,17 @@
+modules:
+  icmp:
+    prober: icmp
+    icmp:
+      preferred_ip_protocol: "ip4"
+  icmp_v6:
+    prober: icmp
+    icmp:
+      preferred_ip_protocol: "ip6"
+  http_get:
+    prober: http
+    http:
+      preferred_ip_protocol: "ip4"
+  http_get_v6:
+    prober: http
+    http:
+      preferred_ip_protocol: "ip6"

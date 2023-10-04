@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export REMOTE_WRITE_URL=https://hoge.com
+export REMOTE_USERNAME=fuga
+export REMOTE_PASSWORD=go

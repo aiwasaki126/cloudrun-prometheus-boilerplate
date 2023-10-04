@@ -1,0 +1,26 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  entrypoint: 'bash'
+  args: ['-c', 'docker build -t ${_REGION}-docker.pkg.dev/${PROJECT_ID}/prometheus/prometheus 
+          --build-arg remote_write_url=$$remote_write_url
+          --build-arg remote_username=$$remote_username
+          --build-arg remote_password=$$remote_password
+          -f services/prometheus/Dockerfile services/prometheus']
+  secretEnv:
+    - remote_write_url
+    - remote_username
+    - remote_password
+images: ['${_REGION}-docker.pkg.dev/${PROJECT_ID}/prometheus/prometheus']
+serviceAccount: 'projects/${PROJECT_ID}/serviceAccounts/build-prometheus-cluster@${PROJECT_ID}.iam.gserviceaccount.com'
+options:
+  logging: CLOUD_LOGGING_ONLY
+availableSecrets:
+  secretManager:
+  - versionName: projects/${PROJECT_ID}/secrets/prometheus_remote_write_url/versions/latest
+    env: remote_write_url
+  - versionName: projects/${PROJECT_ID}/secrets/prometheus_remote_username/versions/latest
+    env: remote_username
+  - versionName: projects/${PROJECT_ID}/secrets/prometheus_remote_password/versions/latest
+    env: remote_password
+substitutions:
+  _REGION: asia-northeast1
