@@ -1,0 +1,11 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  entrypoint: 'bash'
+  args: ['-c', 'docker build -t ${_REGION}-docker.pkg.dev/${PROJECT_ID}/prometheus/blackbox-exporter 
+          -f services/blackbox_exporter/Dockerfile services/blackbox_exporter']
+images: ['${_REGION}-docker.pkg.dev/${PROJECT_ID}/prometheus/blackbox-exporter']
+serviceAccount: 'projects/${PROJECT_ID}/serviceAccounts/build-prometheus-cluster@${PROJECT_ID}.iam.gserviceaccount.com'
+options:
+  logging: CLOUD_LOGGING_ONLY
+substitutions:
+  _REGION: asia-northeast1
