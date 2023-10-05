@@ -32,9 +32,9 @@ On the other hand, containers deployed to Google Cloud are defined in `services/
 1. Set environment variables to specify remote write (If you don't need remote write, remove remote write section from prometheus.yml).
 
     ```bash
-    export REMOTE_WRITE_URL=https://hoge.com 
-    export REMOTE_USERNAME=fuga
-    export REMOTE_PASSWORD=go
+    export REMOTE_WRITE_URL=<YOUR REMOTE WRITE URL>
+    export REMOTE_USERNAME=<YOUR REMOTE WRITE USERNAME>
+    export REMOTE_PASSWORD=<YOUR REMOTE PASSWORD>
     ```
 
 2. Run containers locally.
